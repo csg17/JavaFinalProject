@@ -60,12 +60,14 @@ public class WriteThread implements Runnable {
 					break;
 			}
 		} catch (Exception e) {
-			System.out.println("This is wrong root. Write again please.");
+			//System.out.println("This is wrong root. Write again please.");
 			System.exit(0);
 		}
 	}
 	
 	public void writeCSVFile(PrintWriter outputStream) {
+		int flag=1;
+		
 		try {
 			System.out.println("I will write\n");
 			
@@ -73,12 +75,14 @@ public class WriteThread implements Runnable {
 	            String buffer = queue.take();
 	            //Check whether end of file has been reached
 	            if(buffer.equals("EOF")){ 
-	        	 	desPath = desPath.substring(0, desPath.lastIndexOf('.')) + "2" + ".csv";
+	            	if(flag==0) break;
+	        	 	desPath = desPath.substring(0, desPath.indexOf("1")) + "2" + ".csv";
 	        	 	File targetFile2 = new File(desPath);
 	        	 	PrintWriter outputStream2 = new PrintWriter(targetFile2);
+	        	 	flag--;
 	            	writeCSVFile(outputStream2);
 	            }
-	            System.out.println(buffer);
+	            //System.out.println(buffer);
 	            outputStream.println(buffer);
 	            outputStream.flush();
 	        }   
