@@ -39,11 +39,18 @@ public class MergeExcelFiles {
 	 * */
 	public void run(String[] args) {
 		
-		BlockingQueue<firstExcel> queue = new ArrayBlockingQueue<firstExcel>(1024);
-		ReaderThread reader = new ReaderThread(inputPath, queue);
-		WriteThread writer = new WriteThread(desPath);
-		new Thread(reader).start();
-		//new Thread(writer).start();
+		Options options = createOption();
+		if ( parseOption(options, args) ) {
+			if (help) {
+				printHelp(options);
+				System.out.println( "<<This is printed since you want>>");
+			}
+			BlockingQueue<String> queue = new ArrayBlockingQueue<String>(1024);
+			ReaderThread reader = new ReaderThread(inputPath, queue);
+			WriteThread writer = new WriteThread(desPath, queue);
+			new Thread(reader).start();
+			new Thread(writer).start();
+		}
 	}
 	
 	private boolean parseOption(Options options, String[] args) {
@@ -67,9 +74,9 @@ public class MergeExcelFiles {
 	private void printHelp(Options options) {
 		// TODO Auto-generated method stub
 		HelpFormatter Formatter = new HelpFormatter(); // 도움말 자동으로 만들어주는 클래
-		String header = "MergeExcelFiles";
+		String header = "JavaFinalProject";
 		String footer = "";
-		Formatter.printHelp("MergeExcelFiles", header, options, footer, true);
+		Formatter.printHelp("JavaFinalProject", header, options, footer, true);
 	}
 
 	// DEFINITION
@@ -92,7 +99,6 @@ public class MergeExcelFiles {
 		
 		options.addOption(Option.builder("h").longOpt("help")
 				.desc("Show a Help page") // description
-				//.hasArg() //값받아야 하니
 				.argName("Help") //argument name이 어떤 걸 의미하는지 보여주는 역       
 				.build());
 		
