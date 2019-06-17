@@ -1,6 +1,5 @@
 package edu.handong.csee;
 
-import edu.handong.csee.datas.firstExcel;
 import edu.handong.csee.threads.*;
 import edu.handong.csee.threads.ReaderThread;
 import org.apache.commons.cli.CommandLine;

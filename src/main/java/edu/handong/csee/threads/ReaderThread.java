@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import edu.handong.csee.exception.myException;
+import edu.handong.csee.mygenerics.*;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -72,7 +73,6 @@ public class ReaderThread implements Runnable{
 		
 		try (InputStream inp = is) {
 			
-			//Thread.sleep(1000);
 		    Workbook wb = WorkbookFactory.create(inp);
             Sheet datatypeSheet = wb.getSheetAt(0);
             
@@ -83,12 +83,18 @@ public class ReaderThread implements Runnable{
 			
 			int i=0;
 			while(iterator.hasNext()) {
-				if(i==0) { finalRow = "파일번호"; }
-				else { finalRow = filePath.substring(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')); }
+				
 				Row currentRow = iterator.next();
 				Iterator<Cell> cellIterator = currentRow.iterator();
 				
+				if(currentRow.getPhysicalNumberOfCells()==4) { continue; }
+				//System.out.println("cell: " + currentRow.getPhysicalNumberOfCells() + "\n");
+				if(i==0) { 
+					finalRow = "파일번호"; 
+				}
+				else { finalRow = filePath.substring(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')); }
 				ArrayList<String> tempRow = new ArrayList<String>();
+				
 				while(cellIterator.hasNext()) {
 					Cell currentCell = cellIterator.next();
 					tempRow.add(String.valueOf(currentCell));
@@ -96,32 +102,34 @@ public class ReaderThread implements Runnable{
 				}
 				
 				// exception : '\n'나오거나, ','나오는 경우 !!  
+				// tempRow를 다시 csv에 저장할 수 있게 만들기.  
 				for(String tr : tempRow) {
 					try {
 						if(tr.indexOf('\n')>0 || tr.indexOf(',')>0) throw new myException();
 					}
 					catch(myException e){
-						if(tr.indexOf('\n')>0) { tr = tr.split("\n")[0] + " " + tr.split("\n")[1]; }
-						if(tr.indexOf(',')>0) { 
-							int in = 0;
-							
-							for( String temp : tr.split(",") ) {
-								if( in==0 ) { tr = temp; in++; }
-								else { 
-									tr = tr + temp; 
-									in++; 
-								}
+						//checkingIndex<
+						if(tr.indexOf('\n')>0) {
+							checkingIndex<String> ch1 = new checkingIndex<String>();
+							for( String temp : tr.split("\n") ) {
+								tr = ch1.deleteIndexOf(temp);
 							}
-							
+						}
+						if(tr.indexOf(',')>0) {
+							checkingIndex<String> ch2 = new checkingIndex<String>();
+							for( String temp : tr.split(",") ) {
+								tr = ch2.deleteIndexOf(temp);
+							}
 						}
 						System.out.println(e.getMessage());
+						e.setFileName(filePath);
 					}
-					finalRow = finalRow + ", " + tr;
+					finalRow = finalRow + ", " + tr; 
+					//System.out.println(finalRow+"|");
 				}
+				
 				queue.put(finalRow);
 				i++;
-				//tempRow = null;
-				//finalRow = null;
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
