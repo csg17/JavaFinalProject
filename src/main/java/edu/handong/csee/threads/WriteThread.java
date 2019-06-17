@@ -58,16 +58,15 @@ public class WriteThread implements Runnable {
 				index = 0;
 				}
 				//path가 경로인지 파일 이름인지
-			System.out.println("index: " + index + desPath);
 			if( !targetFile.exists()) { 
 				if(targetFile.getParent() != null ) {
 					targetFile.getParentFile().mkdirs();
 				}
 			}
-			outputStream = new PrintWriter(targetFile);
 			
 			switch(index) {
 				case 1: //.csv로 저장해야하는 경우
+					outputStream = new PrintWriter(targetFile);
 					writeCSVFile(outputStream);
 					break;
 				
@@ -76,7 +75,8 @@ public class WriteThread implements Runnable {
 					XSSFWorkbook workbook= new XSSFWorkbook();
 				    XSSFSheet sheet = workbook.createSheet("JavaFinalProject");
 				    ArrayList<String> buffer = new ArrayList<String>();
-				  
+				    
+				    
 				    FileOutputStream outputStreamE = new FileOutputStream(new File(desPath));
 					writeEXCELFile(outputStreamE, workbook, sheet, buffer);
 					break;
@@ -124,7 +124,6 @@ public class WriteThread implements Runnable {
 	}
 	
 	public void writeEXCELFile(FileOutputStream outputStreamE, XSSFWorkbook workbook, XSSFSheet sheet, ArrayList<String> buffer) throws FileNotFoundException {
-		//ArrayList<String> buffer = new ArrayList<String>();
 		int rowNum=0;
 
 		  while(true) {
@@ -133,22 +132,20 @@ public class WriteThread implements Runnable {
 				String tempQ = queue.take();
 				if(tempQ.equals("EOF")) {
 					//break;
-					System.out.println("들어왓당" +flag);
-					if(flag2 == 0) break;
+					//System.out.println("들어왓당" +flag2);
+					//if(flag2 == 0) break;
 					
 					XSSFWorkbook workbook2= new XSSFWorkbook();
-				    XSSFSheet sheet2 = workbook.createSheet("JavaFinalProject2");
+				    XSSFSheet sheet2 = workbook2.createSheet("JavaFinalProject2");
 				    System.out.println("BEFORE despath: " + desPath);
 				    desPath = desPath.substring(0, desPath.indexOf('1')) + "2" + ".xlsx";
-				    System.out.println("despath: " + desPath);
+
 				    FileOutputStream outputStreamE2 = new FileOutputStream(new File(desPath));
-				    ArrayList<String> buffer2 = new ArrayList<String>();
 				    
-				    flag2--;
-					writeEXCELFile(outputStreamE2, workbook2, sheet2, buffer2);
-					
+					writeEXCELFile2(outputStreamE2, workbook2, sheet2);
+					break;
 				}
-				else buffer.add(tempQ); 
+				else { buffer.add(tempQ); }
 				
 			  } catch (Exception e) {
 				  e.printStackTrace();
@@ -156,6 +153,7 @@ public class WriteThread implements Runnable {
 		  }
 		  
 		  for (String data : buffer) {
+			  //System.out.println("despath: " + data);
 			  Row row = sheet.createRow(rowNum++);
 			  int colNum=0;
 			  
@@ -168,6 +166,46 @@ public class WriteThread implements Runnable {
 			try {
 				workbook.write(outputStreamE);
 				workbook.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
+		  System.out.println("Done");
+	}
+	
+	public void writeEXCELFile2(FileOutputStream outputStreamE2, XSSFWorkbook workbook2, XSSFSheet sheet2) throws FileNotFoundException
+	{
+		ArrayList<String> buffer2 = new ArrayList<String>();
+		int rowNum = 0 ;
+		while(true) {
+			  try {
+				String tempQ = queue.take();
+				//System.out.println("Q: " + tempQ);
+				if(tempQ.equals("EOF")) {
+					break;
+				}
+				else { buffer2.add(tempQ); }
+				
+			  } catch (Exception e) {
+				  e.printStackTrace();
+			  }
+		  }
+		  
+		  for (String data : buffer2) {
+			  System.out.println("despath: " + data);
+			  Row row = sheet2.createRow(rowNum++);
+			  int colNum=0;
+			  
+			  for( String d : data.split(",")) {
+				  Cell cell = row.createCell(colNum++);
+				  cell.setCellValue((String) d);
+			  }
+		  }
+	
+			try {
+				workbook2.write(outputStreamE2);
+				workbook2.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

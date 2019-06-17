@@ -17,7 +17,7 @@ public class myException extends Exception{
 		String zipName = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
 
 		file = file.substring(0, file.lastIndexOf('/')+1) + "error.csv";
-		System.out.println(file);
+		//System.out.println(file);
 		File targetFile = new File(file);
 		
 		if( !targetFile.exists()) { 
