@@ -27,16 +27,18 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 public class ReaderThread implements Runnable{
 	private String filePath;
 	private BlockingQueue<String> queue;
+	private String desPath;
 	
-	public ReaderThread(String filePath, BlockingQueue<String> queue) {
+	public ReaderThread(String filePath, String desPath, BlockingQueue<String> queue) {
 		this.filePath = filePath;
 		this.queue = queue;
+		this.desPath = desPath;
 	}
 	/*
 	 * implement this function when call thread
 	 * */
 	public void run() {
-		System.out.println("In reader thread.\n");
+		System.out.println("\n<<<<<IN READ THREAD>>>>>\n");
 		readFileInZip(filePath);
 	}
 	
@@ -93,6 +95,7 @@ public class ReaderThread implements Runnable{
 					finalRow = "파일번호"; 
 				}
 				else { finalRow = filePath.substring(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')); }
+				
 				ArrayList<String> tempRow = new ArrayList<String>();
 				
 				while(cellIterator.hasNext()) {
@@ -108,24 +111,18 @@ public class ReaderThread implements Runnable{
 						if(tr.indexOf('\n')>0 || tr.indexOf(',')>0) throw new myException();
 					}
 					catch(myException e){
-						//checkingIndex<
-						if(tr.indexOf('\n')>0) {
-							checkingIndex<String> ch1 = new checkingIndex<String>();
-							for( String temp : tr.split("\n") ) {
-								tr = ch1.deleteIndexOf(temp);
-							}
+						checkingIndex<String> ch1 = new checkingIndex<String>();
+						if(tr.indexOf('\n')>=0) {
+							tr = ch1.deleteEnter(tr);
 						}
-						if(tr.indexOf(',')>0) {
-							checkingIndex<String> ch2 = new checkingIndex<String>();
-							for( String temp : tr.split(",") ) {
-								tr = ch2.deleteIndexOf(temp);
-							}
+						if(tr.indexOf(',')>=0) {
+							tr = ch1.deleteComma(tr);
 						}
+						
 						System.out.println(e.getMessage());
-						e.setFileName(filePath);
+						e.setFileName(desPath, filePath);
 					}
 					finalRow = finalRow + ", " + tr; 
-					//System.out.println(finalRow+"|");
 				}
 				
 				queue.put(finalRow);

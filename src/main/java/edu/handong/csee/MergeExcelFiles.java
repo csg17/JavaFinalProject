@@ -45,7 +45,7 @@ public class MergeExcelFiles {
 				System.out.println( "<<This is printed since you want>>");
 			}
 			BlockingQueue<String> queue = new ArrayBlockingQueue<String>(1024);
-			ReaderThread reader = new ReaderThread(inputPath, queue);
+			ReaderThread reader = new ReaderThread(inputPath, desPath, queue);
 			WriteThread writer = new WriteThread(desPath, queue);
 			new Thread(reader).start();
 			new Thread(writer).start();

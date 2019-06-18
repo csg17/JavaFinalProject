@@ -3,6 +3,7 @@ package edu.handong.csee.exception;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class myException extends Exception{
 	public myException () {
@@ -11,14 +12,15 @@ public class myException extends Exception{
 	public myException(String message) {
 		super(message);
 	}
+	// users/seulgi/desktop/ff.csv
 	
-	public void setFileName(String file) {
+	public void setFileName(String desfile, String inputfile) {
 		PrintWriter outStream = null;
-		String zipName = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
-
-		file = file.substring(0, file.lastIndexOf('/')+1) + "error.csv";
+		String zipName = inputfile.substring(inputfile.lastIndexOf('/')+1, inputfile.length());
+	
+		desfile = desfile.substring(0, desfile.lastIndexOf('/')+1) + "error.csv";
 		//System.out.println(file);
-		File targetFile = new File(file);
+		File targetFile = new File(desfile);
 		
 		if( !targetFile.exists()) { 
 			if(targetFile.getParent() != null ) {

@@ -76,14 +76,11 @@ public class WriteThread implements Runnable {
 				    XSSFSheet sheet = workbook.createSheet("JavaFinalProject");
 				    ArrayList<String> buffer = new ArrayList<String>();
 				    
-				    
 				    FileOutputStream outputStreamE = new FileOutputStream(new File(desPath));
 					writeEXCELFile(outputStreamE, workbook, sheet, buffer);
 					break;
 			}
 		} catch (Exception e) {
-			System.out.println("[root problem.]");
-			//System.exit(0);
 			e.printStackTrace();
 		}
 	}
@@ -133,16 +130,17 @@ public class WriteThread implements Runnable {
 				if(tempQ.equals("EOF")) {
 					//break;
 					//System.out.println("들어왓당" +flag2);
-					//if(flag2 == 0) break;
+					if(flag2 == 0) break;
 					
 					XSSFWorkbook workbook2= new XSSFWorkbook();
 				    XSSFSheet sheet2 = workbook2.createSheet("JavaFinalProject2");
-				    System.out.println("BEFORE despath: " + desPath);
+
 				    desPath = desPath.substring(0, desPath.indexOf('1')) + "2" + ".xlsx";
 
 				    FileOutputStream outputStreamE2 = new FileOutputStream(new File(desPath));
-				    
-					writeEXCELFile2(outputStreamE2, workbook2, sheet2);
+				    ArrayList<String> buffer2 = new ArrayList<String>();
+				    flag2--;
+					writeEXCELFile(outputStreamE2, workbook2, sheet2, buffer2);
 					break;
 				}
 				else { buffer.add(tempQ); }
@@ -153,7 +151,6 @@ public class WriteThread implements Runnable {
 		  }
 		  
 		  for (String data : buffer) {
-			  //System.out.println("despath: " + data);
 			  Row row = sheet.createRow(rowNum++);
 			  int colNum=0;
 			  
@@ -171,46 +168,6 @@ public class WriteThread implements Runnable {
 				e.printStackTrace();
 			}
 		  
-		  System.out.println("Done");
-	}
-	
-	public void writeEXCELFile2(FileOutputStream outputStreamE2, XSSFWorkbook workbook2, XSSFSheet sheet2) throws FileNotFoundException
-	{
-		ArrayList<String> buffer2 = new ArrayList<String>();
-		int rowNum = 0 ;
-		while(true) {
-			  try {
-				String tempQ = queue.take();
-				//System.out.println("Q: " + tempQ);
-				if(tempQ.equals("EOF")) {
-					break;
-				}
-				else { buffer2.add(tempQ); }
-				
-			  } catch (Exception e) {
-				  e.printStackTrace();
-			  }
-		  }
-		  
-		  for (String data : buffer2) {
-			  System.out.println("despath: " + data);
-			  Row row = sheet2.createRow(rowNum++);
-			  int colNum=0;
-			  
-			  for( String d : data.split(",")) {
-				  Cell cell = row.createCell(colNum++);
-				  cell.setCellValue((String) d);
-			  }
-		  }
-	
-			try {
-				workbook2.write(outputStreamE2);
-				workbook2.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		  
-		  System.out.println("Done");
+			System.out.println("<< The file is saved>>");
 	}
 }
