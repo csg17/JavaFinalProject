@@ -108,7 +108,7 @@ public class WriteThread implements Runnable {
 		}
 		
 		System.out.println("<< The file is saved>>");
-		outputStream.close();
+		//outputStream.close();
 	}
 	
 	public void writeEXCELFile(FileOutputStream outputStreamE, XSSFWorkbook workbook, XSSFSheet sheet, ArrayList<String> buffer) throws FileNotFoundException {

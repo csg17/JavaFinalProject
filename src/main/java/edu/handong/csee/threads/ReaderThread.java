@@ -103,7 +103,6 @@ public class ReaderThread implements Runnable{
 					tempRow.add(String.valueOf(currentCell));
 					// tempRow에 1row씩 저장하고 그걸 큐에 넣어주기. */
 				}
-				
 				// exception : '\n'나오거나, ','나오는 경우 !!  
 				// tempRow를 다시 csv에 저장할 수 있게 만들기.  
 				for(String tr : tempRow) {
