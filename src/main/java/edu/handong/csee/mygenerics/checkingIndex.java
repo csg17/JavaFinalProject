@@ -2,13 +2,15 @@ package edu.handong.csee.mygenerics;
 
 public class checkingIndex<E> {
 	//private S string;
-	private E strArray;
+	private E str;
 	private String finalStr;
 	private int i;
 	
-	public checkingIndex() {	}
+	public checkingIndex(E str) {
+		this.str = str;
+	}
 	
-	public String deleteEnter(E str) {
+	public String deleteEnter() {
 		i = 0;
 		
 		finalStr = String.valueOf(str);
@@ -26,7 +28,7 @@ public class checkingIndex<E> {
 		return finalStr;
 	}
 	
-	public String deleteComma(E str) {
+	public String deleteComma() {
 		i = 0;
 		
 		finalStr = String.valueOf(str);

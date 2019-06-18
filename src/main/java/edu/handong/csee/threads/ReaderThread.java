@@ -111,15 +111,15 @@ public class ReaderThread implements Runnable{
 						if(tr.indexOf('\n')>0 || tr.indexOf(',')>0) throw new myException();
 					}
 					catch(myException e){
-						checkingIndex<String> ch1 = new checkingIndex<String>();
+						checkingIndex<String> ch1 = new checkingIndex<String>(tr);
 						if(tr.indexOf('\n')>=0) {
-							tr = ch1.deleteEnter(tr);
+							tr = ch1.deleteEnter();
 						}
 						if(tr.indexOf(',')>=0) {
-							tr = ch1.deleteComma(tr);
+							tr = ch1.deleteComma();
 						}
 						
-						System.out.println(e.getMessage());
+						//System.out.println(e.getMessage());
 						e.setFileName(desPath, filePath);
 					}
 					finalRow = finalRow + ", " + tr; 
