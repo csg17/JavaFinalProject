@@ -21,12 +21,13 @@ public class checkingIndex<E> {
 			}
 			else {
 				finalStr = finalStr + temp;
+				//System.out.println(finalStr);
 				i++;
 			}
 		}
 		
 		return finalStr;
-	}
+	} 
 	
 	public String deleteComma() {
 		i = 0;

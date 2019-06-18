@@ -49,7 +49,7 @@ public class MergeExcelFiles {
 			WriteThread writer = new WriteThread(desPath, queue);
 			new Thread(reader).start();
 			new Thread(writer).start();
-		}
+		} 
 	}
 	
 	private boolean parseOption(Options options, String[] args) {

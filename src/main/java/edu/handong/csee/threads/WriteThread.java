@@ -28,7 +28,6 @@ public class WriteThread implements Runnable {
 	
 	public void run() {
 	 	PrintWriter outputStream = null;
-		File targetFile = new File(desPath);
 		//System.out.println(desPath);
 		
 		String str = null;
@@ -46,6 +45,7 @@ public class WriteThread implements Runnable {
 				desPath = desPath.substring(0, desPath.lastIndexOf('.')) + "1" + ".xlsx";
 				index = 0;
 				}
+			File targetFile = new File(desPath);
 				//path가 경로인지 파일 이름인지
 			if( !targetFile.exists()) { 
 				if(targetFile.getParent() != null ) {
@@ -68,7 +68,7 @@ public class WriteThread implements Runnable {
 				    FileOutputStream outputStreamE = new FileOutputStream(new File(desPath));
 					writeEXCELFile(outputStreamE, workbook, sheet, buffer);
 					break;
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -106,7 +106,9 @@ public class WriteThread implements Runnable {
 			e.printStackTrace();
 			//e.getMessage();
 		}
+		
 		System.out.println("<< The file is saved>>");
+		outputStream.close();
 	}
 	
 	public void writeEXCELFile(FileOutputStream outputStreamE, XSSFWorkbook workbook, XSSFSheet sheet, ArrayList<String> buffer) throws FileNotFoundException {
@@ -155,6 +157,7 @@ public class WriteThread implements Runnable {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("<<ERROR>>");
 			}
 		  
 			System.out.println("<< The file is saved>>");

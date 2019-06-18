@@ -108,21 +108,25 @@ public class ReaderThread implements Runnable{
 				// tempRow를 다시 csv에 저장할 수 있게 만들기.  
 				for(String tr : tempRow) {
 					try {
-						if(tr.indexOf('\n')>0 || tr.indexOf(',')>0) throw new myException();
+						if(tr.indexOf('\n')>=0 || tr.indexOf(',')>=0) throw new myException();
 					}
 					catch(myException e){
-						checkingIndex<String> ch1 = new checkingIndex<String>(tr);
+						
 						if(tr.indexOf('\n')>=0) {
+							checkingIndex<String> ch1 = new checkingIndex<String>(tr);
 							tr = ch1.deleteEnter();
+							//System.out.println(tr);
 						}
 						if(tr.indexOf(',')>=0) {
-							tr = ch1.deleteComma();
+							checkingIndex<String> ch2 = new checkingIndex<String>(tr);
+							tr = ch2.deleteComma();
 						}
 						
 						//System.out.println(e.getMessage());
 						e.setFileName(desPath, filePath);
 					}
 					finalRow = finalRow + ", " + tr; 
+					//System.out.println(finalRow);
 				}
 				
 				queue.put(finalRow);
@@ -133,7 +137,7 @@ public class ReaderThread implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		
 	}
